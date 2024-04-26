@@ -174,6 +174,8 @@ namespace ModLoader
                             if (loadoutInstallButton.BackColor != Color.Green)
                             {
                                 loadoutInstallButton.Text = "Install";
+                                loadoutInstallButton.BackColor = Color.Transparent;
+                                loadoutInstallButton.ForeColor = SystemColors.ControlText;
                             }
                         }
                         else
@@ -193,36 +195,80 @@ namespace ModLoader
 
         private void loadoutInstallButton_Click(object sender, EventArgs e)
         {
+            TreeNode node = loadoutsTreeView.SelectedNode;
+            String filename = node.Text.ToString();
+            String foldername = filename.Split('/')[0];
+            if (foldername == "Others")
+            {
+                foldername = currentLoadedLoadout["Aircraft"].ToString();
+            }
+
+            String loadoutPath = tcaGameFolderTextBox.Text + "\\Arena_Data\\StreamingAssets\\Data\\Loadouts\\" + foldername + ".json";
+
+            if (File.Exists(loadoutPath))
+            {
+                FileStream file = File.Open(loadoutPath, FileMode.Open);
+                StreamReader reader = new StreamReader(file);
+                JObject myAircraft = JObject.Parse(reader.ReadToEnd());
+                reader.Close();
+                file.Close();
+            } else
+            {
+                return;
+            }
+
             if (loadoutInstallButton.Text == "Uninstall")
             {
-                // TODO: Uninstall the loadout
+                FileStream file = File.Open(loadoutPath, FileMode.Open);
+                StreamReader reader = new StreamReader(file);
+                JObject myAircraft = JObject.Parse(reader.ReadToEnd());
+                reader.Close();
+                file.Close();
+
+                foreach (JObject myLoadout in myAircraft["Loadouts"])
+                {
+                    if (myLoadout["Name"].ToString() == currentLoadedLoadout["Name"].ToString())
+                    {
+                        ((JArray)myAircraft["Loadouts"]).Remove(myLoadout);
+                        break;
+                    }
+                }
+                File.WriteAllText(loadoutPath, myAircraft.ToString());
             }
             else if (loadoutInstallButton.Text == "Install")
             {
-                TreeNode node = loadoutsTreeView.SelectedNode;
-                String filename = node.Text.ToString();
-                String foldername = filename.Split('/')[0];
-                if (foldername == "Others")
-                {
-                    foldername = currentLoadedLoadout["Aircraft"].ToString();
-                }
+                // Open the loadout file and check if the loadout is already installed
+                FileStream file = File.Open(loadoutPath, FileMode.Open);
+                StreamReader reader = new StreamReader(file);
+                JObject myAircraft = JObject.Parse(reader.ReadToEnd());
+                reader.Close();
+                file.Close();
 
-                String loadoutPath = tcaGameFolderTextBox.Text + "\\Arena_Data\\StreamingAssets\\Data\\Loadouts\\" + foldername + ".json";
-                if (File.Exists(loadoutPath))
-                {
-                    // Open the loadout file and check if the loadout is already installed
-                    FileStream file = File.Open(loadoutPath, FileMode.Open);
-                    StreamReader reader = new StreamReader(file);
-                    JObject myAircraft = JObject.Parse(reader.ReadToEnd());
-                    reader.Close();
-                    file.Close();
+                ((JArray)myAircraft["Loadouts"]).Add(currentLoadedLoadout);
+                File.WriteAllText(loadoutPath, myAircraft.ToString());
+            }
 
-                    ((JArray)myAircraft["Loadouts"]).Add(currentLoadedLoadout);
-                    File.WriteAllText(loadoutPath, myAircraft.ToString());
+            TreeViewEventArgs e1 = new TreeViewEventArgs(node);
+            loadoutsTreeView_AfterSelect(null, e1);
+        }
 
-                    TreeViewEventArgs e1 = new TreeViewEventArgs(node);
-                    loadoutsTreeView_AfterSelect(null, e1);
-                }
+        private void loadoutInstallButton_MouseEnter(object sender, EventArgs e)
+        {
+            if (loadoutInstallButton.Text == "Installed")
+            {
+                loadoutInstallButton.Text = "Uninstall";
+                loadoutInstallButton.BackColor = Color.Red;
+                loadoutInstallButton.ForeColor = Color.White;
+            }
+        }
+
+        private void loadoutInstallButton_MouseLeave(object sender, EventArgs e)
+        {
+            if (loadoutInstallButton.Text == "Uninstall")
+            {
+                loadoutInstallButton.Text = "Installed";
+                loadoutInstallButton.BackColor = Color.Green;
+                loadoutInstallButton.ForeColor = Color.White;
             }
         }
     }

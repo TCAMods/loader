@@ -184,6 +184,8 @@
             loadoutInstallButton.Text = "Install";
             loadoutInstallButton.UseVisualStyleBackColor = true;
             loadoutInstallButton.Click += loadoutInstallButton_Click;
+            loadoutInstallButton.MouseEnter += loadoutInstallButton_MouseEnter;
+            loadoutInstallButton.MouseLeave += loadoutInstallButton_MouseLeave;
             // 
             // loadoutDescription
             // 
