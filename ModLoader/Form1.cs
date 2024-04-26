@@ -51,7 +51,7 @@ namespace ModLoader
                     string responseBody = response.Content.ReadAsStringAsync().Result;
                     JObject json = JObject.Parse(responseBody);
                     JArray tree = (JArray)json["tree"];
-                    
+
                     // TODO: This is redundant, no?
                     TreeNode AV8B = new TreeNode("AV8B");
                     TreeNode F4E = new TreeNode("F4E");
@@ -110,6 +110,32 @@ namespace ModLoader
                         Others
                     ]);
                     loadoutsTreeView.EndUpdate();
+                }
+            }
+        }
+
+        private async void loadoutsTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            String filename = e.Node.Text.ToString();
+            foreach (var node in loadoutsUnloaded)
+            {
+                if (node["path"].ToString() == filename)
+                {
+                    HttpClient client = new HttpClient();
+                    // fix github not accepting request:
+                    client.DefaultRequestHeaders.Add("User-Agent", "ModLoader");
+                    HttpResponseMessage response = await client.GetAsync(node["url"].ToString());
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = response.Content.ReadAsStringAsync().Result;
+                        JObject json = JObject.Parse(responseBody);
+                        String content = json["content"].ToString();
+                        content = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(content));
+
+                        JObject json2 = JObject.Parse(content);
+                        loadoutTitle.Text = json2["Name"].ToString();
+                        loadoutDescription.Text = json2["Description"].ToString();
+                    }
                 }
             }
         }

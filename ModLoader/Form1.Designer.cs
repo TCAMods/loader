@@ -38,11 +38,14 @@
             splitContainer1 = new SplitContainer();
             loadoutsTreeView = new TreeView();
             tcaFolderBrowser = new FolderBrowserDialog();
+            loadoutTitle = new Label();
+            loadoutDescription = new Label();
             tabControl1.SuspendLayout();
             Setup.SuspendLayout();
             Loadouts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             SuspendLayout();
             // 
@@ -128,6 +131,11 @@
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(loadoutsTreeView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(loadoutDescription);
+            splitContainer1.Panel2.Controls.Add(loadoutTitle);
             splitContainer1.Size = new Size(786, 416);
             splitContainer1.SplitterDistance = 262;
             splitContainer1.TabIndex = 0;
@@ -139,6 +147,27 @@
             loadoutsTreeView.Name = "loadoutsTreeView";
             loadoutsTreeView.Size = new Size(262, 416);
             loadoutsTreeView.TabIndex = 0;
+            loadoutsTreeView.AfterSelect += loadoutsTreeView_AfterSelect;
+            // 
+            // loadoutTitle
+            // 
+            loadoutTitle.AutoEllipsis = true;
+            loadoutTitle.Font = new Font("Segoe UI", 16.125F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            loadoutTitle.Location = new Point(41, 22);
+            loadoutTitle.Name = "loadoutTitle";
+            loadoutTitle.Size = new Size(350, 30);
+            loadoutTitle.TabIndex = 0;
+            loadoutTitle.Text = "Loading...";
+            // 
+            // loadoutDescription
+            // 
+            loadoutDescription.AutoEllipsis = true;
+            loadoutDescription.ForeColor = SystemColors.ControlDarkDark;
+            loadoutDescription.Location = new Point(41, 64);
+            loadoutDescription.Name = "loadoutDescription";
+            loadoutDescription.Size = new Size(400, 200);
+            loadoutDescription.TabIndex = 0;
+            loadoutDescription.Text = "Loading...";
             // 
             // Form1
             // 
@@ -154,6 +183,7 @@
             Setup.PerformLayout();
             Loadouts.ResumeLayout(false);
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
@@ -171,5 +201,7 @@
         private FolderBrowserDialog tcaFolderBrowser;
         private SplitContainer splitContainer1;
         private TreeView loadoutsTreeView;
+        private Label loadoutDescription;
+        private Label loadoutTitle;
     }
 }
