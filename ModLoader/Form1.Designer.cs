@@ -37,9 +37,12 @@
             Loadouts = new TabPage();
             splitContainer1 = new SplitContainer();
             loadoutsTreeView = new TreeView();
-            tcaFolderBrowser = new FolderBrowserDialog();
-            loadoutTitle = new Label();
+            loadoutVersionNumber = new Label();
+            loadoutAuthorLabel = new Label();
+            loadoutInstallButton = new Button();
             loadoutDescription = new Label();
+            loadoutTitle = new Label();
+            tcaFolderBrowser = new FolderBrowserDialog();
             tabControl1.SuspendLayout();
             Setup.SuspendLayout();
             Loadouts.SuspendLayout();
@@ -134,6 +137,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(loadoutVersionNumber);
+            splitContainer1.Panel2.Controls.Add(loadoutAuthorLabel);
+            splitContainer1.Panel2.Controls.Add(loadoutInstallButton);
             splitContainer1.Panel2.Controls.Add(loadoutDescription);
             splitContainer1.Panel2.Controls.Add(loadoutTitle);
             splitContainer1.Size = new Size(786, 416);
@@ -149,25 +155,55 @@
             loadoutsTreeView.TabIndex = 0;
             loadoutsTreeView.AfterSelect += loadoutsTreeView_AfterSelect;
             // 
-            // loadoutTitle
+            // loadoutVersionNumber
             // 
-            loadoutTitle.AutoEllipsis = true;
-            loadoutTitle.Font = new Font("Segoe UI", 16.125F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            loadoutTitle.Location = new Point(41, 22);
-            loadoutTitle.Name = "loadoutTitle";
-            loadoutTitle.Size = new Size(350, 30);
-            loadoutTitle.TabIndex = 0;
-            loadoutTitle.Text = "Loading...";
+            loadoutVersionNumber.AutoEllipsis = true;
+            loadoutVersionNumber.ForeColor = SystemColors.ControlDark;
+            loadoutVersionNumber.Location = new Point(183, 57);
+            loadoutVersionNumber.Name = "loadoutVersionNumber";
+            loadoutVersionNumber.Size = new Size(130, 17);
+            loadoutVersionNumber.TabIndex = 3;
+            loadoutVersionNumber.Text = "1.0.0";
+            // 
+            // loadoutAuthorLabel
+            // 
+            loadoutAuthorLabel.AutoEllipsis = true;
+            loadoutAuthorLabel.ForeColor = SystemColors.ControlDark;
+            loadoutAuthorLabel.Location = new Point(47, 57);
+            loadoutAuthorLabel.Name = "loadoutAuthorLabel";
+            loadoutAuthorLabel.Size = new Size(130, 17);
+            loadoutAuthorLabel.TabIndex = 2;
+            loadoutAuthorLabel.Text = "by Hanz";
+            // 
+            // loadoutInstallButton
+            // 
+            loadoutInstallButton.Location = new Point(397, 27);
+            loadoutInstallButton.Name = "loadoutInstallButton";
+            loadoutInstallButton.Size = new Size(93, 23);
+            loadoutInstallButton.TabIndex = 1;
+            loadoutInstallButton.Text = "Install";
+            loadoutInstallButton.UseVisualStyleBackColor = true;
+            loadoutInstallButton.Click += loadoutInstallButton_Click;
             // 
             // loadoutDescription
             // 
             loadoutDescription.AutoEllipsis = true;
             loadoutDescription.ForeColor = SystemColors.ControlDarkDark;
-            loadoutDescription.Location = new Point(41, 64);
+            loadoutDescription.Location = new Point(41, 100);
             loadoutDescription.Name = "loadoutDescription";
             loadoutDescription.Size = new Size(400, 200);
             loadoutDescription.TabIndex = 0;
-            loadoutDescription.Text = "Loading...";
+            loadoutDescription.Text = "Expand the tree view and select your desired loadout for your aircraft";
+            // 
+            // loadoutTitle
+            // 
+            loadoutTitle.AutoEllipsis = true;
+            loadoutTitle.Font = new Font("Segoe UI", 16.125F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            loadoutTitle.Location = new Point(35, 22);
+            loadoutTitle.Name = "loadoutTitle";
+            loadoutTitle.Size = new Size(350, 30);
+            loadoutTitle.TabIndex = 0;
+            loadoutTitle.Text = "Custom Loadouts";
             // 
             // Form1
             // 
@@ -203,5 +239,8 @@
         private TreeView loadoutsTreeView;
         private Label loadoutDescription;
         private Label loadoutTitle;
+        private Button loadoutInstallButton;
+        private Label loadoutVersionNumber;
+        private Label loadoutAuthorLabel;
     }
 }

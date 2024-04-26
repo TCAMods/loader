@@ -9,6 +9,7 @@ namespace ModLoader
     public partial class Form1 : Form
     {
         JArray loadoutsUnloaded = new JArray();
+        JObject currentLoadedLoadout = new JObject();
 
         public Form1()
         {
@@ -35,6 +36,10 @@ namespace ModLoader
                 tabControl1.SelectTab(Setup);
                 return;
             }
+
+            loadoutAuthorLabel.Visible = false;
+            loadoutVersionNumber.Visible = false;
+            loadoutInstallButton.Visible = false;
 
             String[] ignores = ["README.md", "LICENSE"];
             if (e.TabPage == Loadouts && loadoutsUnloaded.Count == 0)
@@ -135,7 +140,88 @@ namespace ModLoader
                         JObject json2 = JObject.Parse(content);
                         loadoutTitle.Text = json2["Name"].ToString();
                         loadoutDescription.Text = json2["Description"].ToString();
+                        loadoutAuthorLabel.Text = json2["Author"].ToString();
+                        loadoutVersionNumber.Text = json2["Version"].ToString();
+
+                        // Check if the loadout is already installed
+                        String foldername = filename.Split('/')[0];
+                        if (foldername == "Others")
+                        {
+                            foldername = json2["Aircraft"].ToString();
+                        }
+
+                        String loadoutPath = tcaGameFolderTextBox.Text + "\\Arena_Data\\StreamingAssets\\Data\\Loadouts\\" + foldername + ".json";
+                        if (File.Exists(loadoutPath))
+                        {
+                            // Open the loadout file and check if the loadout is already installed
+                            FileStream file = File.Open(loadoutPath, FileMode.Open);
+                            StreamReader reader = new StreamReader(file);
+                            JObject myAircraft = JObject.Parse(reader.ReadToEnd());
+                            reader.Close();
+                            file.Close();
+
+                            foreach (JObject myLoadout in myAircraft["Loadouts"])
+                            {
+                                if (myLoadout["Name"].ToString() == json2["Name"].ToString())
+                                {
+                                    loadoutInstallButton.Text = "Installed";
+                                    loadoutInstallButton.BackColor = Color.Green;
+                                    loadoutInstallButton.ForeColor = Color.White;
+                                    break;
+                                }
+                            }
+
+                            if (loadoutInstallButton.BackColor != Color.Green)
+                            {
+                                loadoutInstallButton.Text = "Install";
+                            }
+                        }
+                        else
+                        {
+                            loadoutInstallButton.Visible = true;
+                        }
+
+                        loadoutAuthorLabel.Visible = true;
+                        loadoutVersionNumber.Visible = true;
+                        loadoutInstallButton.Visible = true;
+
+                        currentLoadedLoadout = json2;
                     }
+                }
+            }
+        }
+
+        private void loadoutInstallButton_Click(object sender, EventArgs e)
+        {
+            if (loadoutInstallButton.Text == "Uninstall")
+            {
+                // TODO: Uninstall the loadout
+            }
+            else if (loadoutInstallButton.Text == "Install")
+            {
+                TreeNode node = loadoutsTreeView.SelectedNode;
+                String filename = node.Text.ToString();
+                String foldername = filename.Split('/')[0];
+                if (foldername == "Others")
+                {
+                    foldername = currentLoadedLoadout["Aircraft"].ToString();
+                }
+
+                String loadoutPath = tcaGameFolderTextBox.Text + "\\Arena_Data\\StreamingAssets\\Data\\Loadouts\\" + foldername + ".json";
+                if (File.Exists(loadoutPath))
+                {
+                    // Open the loadout file and check if the loadout is already installed
+                    FileStream file = File.Open(loadoutPath, FileMode.Open);
+                    StreamReader reader = new StreamReader(file);
+                    JObject myAircraft = JObject.Parse(reader.ReadToEnd());
+                    reader.Close();
+                    file.Close();
+
+                    ((JArray)myAircraft["Loadouts"]).Add(currentLoadedLoadout);
+                    File.WriteAllText(loadoutPath, myAircraft.ToString());
+
+                    TreeViewEventArgs e1 = new TreeViewEventArgs(node);
+                    loadoutsTreeView_AfterSelect(null, e1);
                 }
             }
         }
