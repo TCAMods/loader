@@ -139,7 +139,15 @@ namespace ModLoader
                         String content = json["content"].ToString();
                         content = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(content));
 
-                        JObject json2 = JObject.Parse(content);
+                        JObject json2;
+                        try
+                        {
+                            json2 = JObject.Parse(content);
+                        } catch
+                        {
+                            return;
+                        }
+                        
                         loadoutTitle.Text = json2["Name"].ToString();
                         loadoutDescription.Text = json2["Description"].ToString();
                         loadoutAuthorLabel.Text = json2["Author"].ToString();
