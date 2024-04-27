@@ -123,6 +123,10 @@ namespace ModLoader
 
         private async void loadoutsTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            loadoutDescription.Text = "Loading...";
+            loadoutAuthorLabel.Text = "Loading...";
+            loadoutVersionNumber.Text = "Loading...";
+            loadoutTitle.Text = "Loading...";
             String filename = e.Node.Text.ToString();
             foreach (var node in loadoutsUnloaded)
             {
