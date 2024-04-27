@@ -91,6 +91,7 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     - name: Artifact
+      working-directory: ModLoader
       uses: actions/upload-artifact@v4.3.3
       with:
         name: publish-$env:Configuration
