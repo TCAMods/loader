@@ -68,6 +68,8 @@ namespace ModLoader
 
                     foreach (var item in tree)
                     {
+                        if (ignores.Contains(item["path"].ToString())) continue;
+
                         if (item["type"].ToString() == "blob")
                         {
                             loadoutsUnloaded.Add(item);
@@ -212,7 +214,8 @@ namespace ModLoader
                 JObject myAircraft = JObject.Parse(reader.ReadToEnd());
                 reader.Close();
                 file.Close();
-            } else
+            }
+            else
             {
                 return;
             }
@@ -269,6 +272,43 @@ namespace ModLoader
                 loadoutInstallButton.Text = "Installed";
                 loadoutInstallButton.BackColor = Color.Green;
                 loadoutInstallButton.ForeColor = Color.White;
+            }
+        }
+
+        private void searchLoadoutbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                op_searchloadout();
+            }
+        }
+        private void loadoutSearchButton_Click(object sender, EventArgs e)
+        {
+            op_searchloadout();
+        }
+
+        private void op_searchloadout()
+        {
+            String query = searchLoadoutbox.Text;
+            if (query != null)
+            {
+                JArray matches = new JArray();
+                foreach (var node in loadoutsUnloaded)
+                {
+                    if (node["path"].ToString().ToLower().Contains(query.ToLower()))
+                    {
+                        matches.Add(node);
+                    }
+                }
+
+                loadoutsTreeView.Nodes.Clear();
+                foreach (var item in matches)
+                {
+                    if (item["type"].ToString() == "blob")
+                    {
+                        loadoutsTreeView.Nodes.Add(item["path"].ToString());
+                    }
+                }
             }
         }
     }

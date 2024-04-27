@@ -36,6 +36,9 @@
             tcaGameFolderTextBox = new TextBox();
             Loadouts = new TabPage();
             splitContainer1 = new SplitContainer();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            searchLoadoutbox = new TextBox();
+            loadoutSearchButton = new Button();
             loadoutsTreeView = new TreeView();
             loadoutVersionNumber = new Label();
             loadoutAuthorLabel = new Label();
@@ -50,6 +53,7 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -133,6 +137,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(flowLayoutPanel1);
             splitContainer1.Panel1.Controls.Add(loadoutsTreeView);
             // 
             // splitContainer1.Panel2
@@ -146,12 +151,49 @@
             splitContainer1.SplitterDistance = 262;
             splitContainer1.TabIndex = 0;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(searchLoadoutbox);
+            flowLayoutPanel1.Controls.Add(loadoutSearchButton);
+            flowLayoutPanel1.Dock = DockStyle.Top;
+            flowLayoutPanel1.Location = new Point(0, 0);
+            flowLayoutPanel1.Margin = new Padding(0);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(262, 25);
+            flowLayoutPanel1.TabIndex = 3;
+            flowLayoutPanel1.WrapContents = false;
+            // 
+            // searchLoadoutbox
+            // 
+            searchLoadoutbox.Location = new Point(0, 0);
+            searchLoadoutbox.Margin = new Padding(0);
+            searchLoadoutbox.MinimumSize = new Size(205, 30);
+            searchLoadoutbox.Name = "searchLoadoutbox";
+            searchLoadoutbox.PlaceholderText = "Search loadout";
+            searchLoadoutbox.Size = new Size(205, 23);
+            searchLoadoutbox.TabIndex = 1;
+            searchLoadoutbox.KeyPress += searchLoadoutbox_KeyPress;
+            // 
+            // loadoutSearchButton
+            // 
+            loadoutSearchButton.BackColor = Color.Transparent;
+            loadoutSearchButton.ForeColor = SystemColors.ControlText;
+            loadoutSearchButton.Location = new Point(205, 0);
+            loadoutSearchButton.Margin = new Padding(0);
+            loadoutSearchButton.MaximumSize = new Size(57, 22);
+            loadoutSearchButton.Name = "loadoutSearchButton";
+            loadoutSearchButton.Size = new Size(57, 22);
+            loadoutSearchButton.TabIndex = 2;
+            loadoutSearchButton.Text = "Search";
+            loadoutSearchButton.UseVisualStyleBackColor = false;
+            loadoutSearchButton.Click += loadoutSearchButton_Click;
+            // 
             // loadoutsTreeView
             // 
-            loadoutsTreeView.Dock = DockStyle.Fill;
-            loadoutsTreeView.Location = new Point(0, 0);
+            loadoutsTreeView.Dock = DockStyle.Bottom;
+            loadoutsTreeView.Location = new Point(0, 22);
             loadoutsTreeView.Name = "loadoutsTreeView";
-            loadoutsTreeView.Size = new Size(262, 416);
+            loadoutsTreeView.Size = new Size(262, 394);
             loadoutsTreeView.TabIndex = 0;
             loadoutsTreeView.AfterSelect += loadoutsTreeView_AfterSelect;
             // 
@@ -224,6 +266,8 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -244,5 +288,8 @@
         private Button loadoutInstallButton;
         private Label loadoutVersionNumber;
         private Label loadoutAuthorLabel;
+        private Button loadoutSearchButton;
+        private TextBox searchLoadoutbox;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }
