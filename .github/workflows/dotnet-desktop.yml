@@ -85,6 +85,7 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     - name: dotnet publish
+      working-directory: ModLoader
       run: dotnet publish -c $env:Configuration --self-contained false -r win-x64 -o ./publish-$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
